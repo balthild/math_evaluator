@@ -1,7 +1,7 @@
 name: math_evaluator
 description: Math expression parser and evaluator.
 version: 0.1.0
-homepage: https://balthild.com
+homepage: https://github.com/balthild/math_evaluator
 author: balthild <ibalthild@gmail.com>
 
 environment:
