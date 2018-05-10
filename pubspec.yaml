@@ -1,0 +1,14 @@
+name: math_evaluator
+description: Math expression parser and evaluator.
+version: 0.1.0
+homepage: https://balthild.com
+author: balthild <ibalthild@gmail.com>
+
+environment:
+  sdk: '>=2.0.0-dev.51.0 <2.0.0'
+
+#dependencies:
+#  some_pkg: ^1.0.0
+
+dev_dependencies:
+  test: ^0.12.30
