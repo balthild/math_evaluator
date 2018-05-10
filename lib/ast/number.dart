@@ -1,10 +1,11 @@
 import 'dart:math' as math;
 import 'package:math_evaluator/util.dart';
-import 'package:math_evaluator/ast/token/token.dart';
-import 'package:math_evaluator/ast/token/degree.dart';
-import 'package:math_evaluator/ast/token/calculable.dart';
+import 'token.dart';
+import 'degree.dart';
+import 'literal.dart';
+import 'calculable.dart';
 
-class Number extends Token implements Calculable {
+class Number extends Token implements Calculable, Literal {
   final num value;
   Number(this.value);
 
@@ -12,7 +13,7 @@ class Number extends Token implements Calculable {
     if (value is int)
       return value.toString();
     else
-      return doubleToString(value);
+      return numToString(value);
   }
 
   Calculable operator -() => new Number(-value);

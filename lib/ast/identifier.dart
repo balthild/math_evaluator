@@ -1,4 +1,4 @@
-import 'package:math_evaluator/ast/token/token.dart';
+import 'token.dart';
 
 class Identifier extends Token {
   final String name;

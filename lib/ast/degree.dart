@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 import 'package:math_evaluator/util.dart';
-import 'number.dart';
 import 'calculable.dart';
+import 'number.dart';
+import 'token.dart';
+import 'literal.dart';
 
-class Degree implements Calculable {
+class Degree extends Token implements Calculable, Literal {
   final int degree, minute;
   final num second;
   Degree._(int this.degree, int this.minute, num this.second);
@@ -44,7 +46,7 @@ class Degree implements Calculable {
   }
 
   String toString() {
-    return "$degree°$minute′${doubleToString(second)}″";
+    return "$degree°$minute′${numToString(second)}″";
   }
 
   num toRadius() => (degree + minute / 60 + second / 3600) * math.pi / 180;
@@ -78,7 +80,7 @@ class Degree implements Calculable {
         second * x.value
       );
     else if (x is Degree)
-      return new Number(toRadius() / x.toRadius());
+      return new Number(toRadius() * x.toRadius());
 
     throw "Unknown error";
   }

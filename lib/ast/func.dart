@@ -1,8 +1,9 @@
 import 'package:math_evaluator/functions.dart';
-import 'package:math_evaluator/ast/element.dart';
-import 'package:math_evaluator/ast/group.dart';
+import 'element.dart';
+import 'group.dart';
+import 'literal.dart';
 
-class Func extends Element {
+class Func extends Element implements Literal {
   final String name;
   final List<Element> parameters;
 
@@ -11,7 +12,7 @@ class Func extends Element {
       throw "Undefined function: $name";
   }
 
-  Element evaluate() {
+  Literal evaluate() {
     for (int i = 0; i < parameters.length; ++i) {
       var item = parameters[i];
       if (item is Func)

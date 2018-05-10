@@ -1,4 +1,7 @@
-String doubleToString(double n) {
+String numToString(num n) {
+  if (n is int)
+    return n.toString();
+
   var str = num.parse(n.toStringAsFixed(12)).toString();
   if (str.endsWith(".0"))
     return str.substring(0, str.length - 2);

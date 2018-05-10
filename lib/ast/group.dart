@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 import 'func.dart';
-import 'package:math_evaluator/ast/element.dart';
-import 'package:math_evaluator/ast/token/token.dart';
-import 'package:math_evaluator/ast/token/number.dart';
-import 'package:math_evaluator/ast/token/operator.dart';
-import 'package:math_evaluator/ast/token/identifier.dart';
+import 'element.dart';
+import 'token.dart';
+import 'number.dart';
+import 'degree.dart';
+import 'operator.dart';
+import 'identifier.dart';
+import 'literal.dart';
 
 class Group extends Element {
   final List<Token> tokens;
@@ -19,7 +21,7 @@ class Group extends Element {
     }
   }
 
-  Element evaluate() {
+  Literal evaluate() {
     List<Element> elements;
     elements = parseGroups(tokens);
     elements = parseIdentifiers(elements);
@@ -28,7 +30,7 @@ class Group extends Element {
     assert(elements.length == 1, "Unknown error");
 
     final root = elements[0];
-    if (root is Number)
+    if (root is Number || root is Degree)
       return root;
     else if (root is Func)
       return root.evaluate();
@@ -111,24 +113,69 @@ class Group extends Element {
 
     // Angle by degrees
     for (var i = 0; i < elements.length; ++i) {
-      final el = elements[i];
-      if (el is! Operator)
+      final degEl = elements[i];
+      if (degEl is! Operator)
         continue;
 
-      final op = (el as Operator).op;
-      if (op != "°")
+      final degOp = (degEl as Operator).op;
+      if (degOp != "°")
         continue;
 
       if (i == 0)
         throw "Unexpected token °";
 
-      var left = elements[i - 1];
-      if (left is! Number && left is! Group && left is! Func)
+      final degLeft = elements[i - 1];
+      if (degLeft is! Number)
         throw "Unexpected token °";
 
+      final degValue = (degLeft as Number).value;
       elements.removeRange(i - 1, i + 1);
-      elements.insert(i - 1, new Func("_factorial", [left]));
+      elements.insert(i - 1, new Degree(degValue, 0, 0));
       --i;
+
+      final j = i + 2;
+      if (j > elements.length - 1)
+        continue;
+
+      final minEl = elements[j];
+      if (minEl is! Operator)
+        continue;
+
+      final minOp = (minEl as Operator).op;
+      if (minOp == "°")
+        throw "Unexpected token °";
+      if (minOp != "′")
+        continue;
+
+      final minLeft = elements[j - 1];
+      if (minLeft is! Number)
+        throw "Unexpected token ′";
+
+      final minValue = (minLeft as Number).value;
+      elements.removeRange(j - 1, j + 1);
+      elements[i] = new Degree(degValue, minValue, 0);
+
+      final k = j; // Left two elements have been removed
+      if (k > elements.length - 1)
+        continue;
+
+      final secEl = elements[k];
+      if (secEl is! Operator)
+        continue;
+
+      final secOp = (secEl as Operator).op;
+      if (secOp == "°")
+        throw "Unexpected token °";
+      if (secOp != "″")
+        continue;
+
+      final secLeft = elements[k - 1];
+      if (secLeft is! Number)
+        throw "Unexpected token ″";
+
+      final secValue = (secLeft as Number).value;
+      elements.removeRange(k - 1, k + 1);
+      elements[i] = new Degree(degValue, minValue, secValue);
     }
 
     // Factorial
@@ -145,7 +192,7 @@ class Group extends Element {
         throw "Unexpected token !";
 
       var left = elements[i - 1];
-      if (left is! Number && left is! Group && left is! Func)
+      if (left is! Literal && left is! Group)
         throw "Unexpected token !";
 
       elements.removeRange(i - 1, i + 1);
@@ -169,9 +216,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       var left = elements[i - 1], right = elements[i + 1];
-      if (left is! Number && left is! Group && left is! Func)
+      if (left is! Literal && left is! Group)
         throw "Unexpected token ^";
-      if (right is! Number && right is! Group && right is! Func)
+      if (right is! Literal && right is! Group)
         throw "Expected number after ^";
 
       elements.removeRange(i - 1, i + 2);
@@ -182,14 +229,14 @@ class Group extends Element {
     // Insert multiplication sign between two elements
     for (var i = 0; i < elements.length; ++i) {
       final el = elements[i];
-      if (el is! Number && el is! Group && el is! Func)
+      if (el is! Literal && el is! Group)
         continue;
 
       if (i + 1 == elements.length)
         break;
 
       final right = elements[i + 1];
-      if (right is! Number && right is! Group && right is! Func)
+      if (right is! Literal && right is! Group)
         continue;
 
       elements.insert(++i, new Operator("*"));
@@ -211,9 +258,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       final left = elements[i - 1], right = elements[i + 1];
-      if (left is! Number && left is! Group && left is! Func)
+      if (left is! Literal && left is! Group)
         throw "Unexpected token $op";
-      if (right is! Number && right is! Group && right is! Func)
+      if (right is! Literal && right is! Group)
         throw "Unexpected token after $op";
 
       var name = "";
@@ -242,14 +289,14 @@ class Group extends Element {
         throw "Unexpected EOF";
 
       final right = elements[i + 1];
-      if (right is! Number && right is! Group && right is! Func)
+      if (right is! Literal && right is! Group)
         throw "Unexpected token after $op";
 
       var left = null;
       if (i != 0)
         left = elements[i - 1];
 
-      if (i != 0 && (left is Number || left is Group || left is Func))
+      if (i != 0 && (left is Literal || left is Group))
         continue;
 
       elements.removeRange(i, i + 2);
@@ -273,9 +320,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       final left = elements[i - 1], right = elements[i + 1];
-      if (left is! Number && left is! Group && left is! Func)
+      if (left is! Literal && left is! Group)
         throw "Unexpected token $op";
-      if (right is! Number && right is! Group && right is! Func)
+      if (right is! Literal && right is! Group)
         throw "Unexpected token after $op";
 
       var name = "";
