@@ -1,4 +1,4 @@
-import 'package:math_evaluator/ast/calculable.dart';
+import 'package:math_evaluator/ast/contract/calculable.dart';
 
 final Map<String, Function> functions = {
   // Infix operators

@@ -1,6 +1,6 @@
-import 'token.dart';
+import 'contract/token.dart';
 
-class Identifier extends Token {
+class Identifier implements Token {
   final String name;
   Identifier(this.name);
 

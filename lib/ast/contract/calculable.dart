@@ -1,6 +1,6 @@
 import 'element.dart';
 
-abstract class Calculable {
+abstract class Calculable extends Element {
   Calculable operator -();
   Calculable operator +(Calculable x);
   Calculable operator -(Calculable x);

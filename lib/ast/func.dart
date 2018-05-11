@@ -1,9 +1,10 @@
 import 'package:math_evaluator/functions.dart';
-import 'element.dart';
+import 'contract/element.dart';
+import 'contract/evaluable.dart';
+import 'contract/calculable.dart';
 import 'group.dart';
-import 'literal.dart';
 
-class Func extends Element implements Literal {
+class Func implements Evaluable {
   final String name;
   final List<Element> parameters;
 
@@ -12,7 +13,7 @@ class Func extends Element implements Literal {
       throw "Undefined function: $name";
   }
 
-  Literal evaluate() {
+  Calculable evaluate() {
     for (int i = 0; i < parameters.length; ++i) {
       var item = parameters[i];
       if (item is Func)

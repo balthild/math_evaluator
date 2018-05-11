@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 import 'package:math_evaluator/util.dart';
-import 'calculable.dart';
+import 'contract/calculable.dart';
+import 'contract/token.dart';
 import 'number.dart';
-import 'token.dart';
-import 'literal.dart';
 
-class Degree extends Token implements Calculable, Literal {
+class Degree implements Calculable, Token {
   final int degree, minute;
   final num second;
   Degree._(int this.degree, int this.minute, num this.second);

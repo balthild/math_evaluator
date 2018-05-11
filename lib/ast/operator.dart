@@ -1,6 +1,6 @@
-import 'token.dart';
+import 'contract/token.dart';
 
-class Operator extends Token {
+class Operator implements Token {
   final String op;
   Operator(this.op);
 

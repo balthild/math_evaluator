@@ -1,14 +1,15 @@
 import 'dart:math' as math;
-import 'func.dart';
-import 'element.dart';
-import 'token.dart';
+import 'contract/element.dart';
+import 'contract/evaluable.dart';
+import 'contract/calculable.dart';
+import 'contract/token.dart';
 import 'number.dart';
 import 'degree.dart';
 import 'operator.dart';
 import 'identifier.dart';
-import 'literal.dart';
+import 'func.dart';
 
-class Group extends Element {
+class Group implements Evaluable {
   final List<Token> tokens;
   Group(this.tokens) {
     // Trim "(" and ")" pair
@@ -21,7 +22,7 @@ class Group extends Element {
     }
   }
 
-  Literal evaluate() {
+  Calculable evaluate() {
     List<Element> elements;
     elements = parseGroups(tokens);
     elements = parseIdentifiers(elements);
@@ -192,7 +193,7 @@ class Group extends Element {
         throw "Unexpected token !";
 
       var left = elements[i - 1];
-      if (left is! Literal && left is! Group)
+      if (left is! Calculable && left is! Evaluable)
         throw "Unexpected token !";
 
       elements.removeRange(i - 1, i + 1);
@@ -216,9 +217,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       var left = elements[i - 1], right = elements[i + 1];
-      if (left is! Literal && left is! Group)
+      if (left is! Calculable && left is! Evaluable)
         throw "Unexpected token ^";
-      if (right is! Literal && right is! Group)
+      if (right is! Calculable && right is! Evaluable)
         throw "Expected number after ^";
 
       elements.removeRange(i - 1, i + 2);
@@ -229,14 +230,14 @@ class Group extends Element {
     // Insert multiplication sign between two elements
     for (var i = 0; i < elements.length; ++i) {
       final el = elements[i];
-      if (el is! Literal && el is! Group)
+      if (el is! Calculable && el is! Evaluable)
         continue;
 
       if (i + 1 == elements.length)
         break;
 
       final right = elements[i + 1];
-      if (right is! Literal && right is! Group)
+      if (right is! Calculable && right is! Evaluable)
         continue;
 
       elements.insert(++i, new Operator("*"));
@@ -258,9 +259,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       final left = elements[i - 1], right = elements[i + 1];
-      if (left is! Literal && left is! Group)
+      if (left is! Calculable && left is! Evaluable)
         throw "Unexpected token $op";
-      if (right is! Literal && right is! Group)
+      if (right is! Calculable && right is! Evaluable)
         throw "Unexpected token after $op";
 
       var name = "";
@@ -289,14 +290,14 @@ class Group extends Element {
         throw "Unexpected EOF";
 
       final right = elements[i + 1];
-      if (right is! Literal && right is! Group)
+      if (right is! Calculable && right is! Evaluable)
         throw "Unexpected token after $op";
 
       var left = null;
       if (i != 0)
         left = elements[i - 1];
 
-      if (i != 0 && (left is Literal || left is Group))
+      if (i != 0 && (left is Calculable || left is Group))
         continue;
 
       elements.removeRange(i, i + 2);
@@ -320,9 +321,9 @@ class Group extends Element {
         throw "Unexpected token $op";
 
       final left = elements[i - 1], right = elements[i + 1];
-      if (left is! Literal && left is! Group)
+      if (left is! Calculable && left is! Evaluable)
         throw "Unexpected token $op";
-      if (right is! Literal && right is! Group)
+      if (right is! Calculable && right is! Evaluable)
         throw "Unexpected token after $op";
 
       var name = "";

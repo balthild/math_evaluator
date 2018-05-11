@@ -1,6 +1,6 @@
-import 'package:math_evaluator/ast/element.dart';
+import 'package:math_evaluator/ast/contract/element.dart';
 import 'package:math_evaluator/ast/group.dart';
-import 'package:math_evaluator/ast/token.dart';
+import 'package:math_evaluator/ast/contract/token.dart';
 import 'package:math_evaluator/ast/operator.dart';
 import 'package:math_evaluator/ast/number.dart';
 import 'package:math_evaluator/ast/identifier.dart';
