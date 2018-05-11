@@ -14,5 +14,8 @@ void main() {
     expect(evaluate("sin(e+π)^2 + cos(e+π)^2").toString(), "1");
     expect(evaluate("2° 3′ 5 ″").toString(), "2°3′5″");
     expect(evaluate("2° 3′ 5 ″ 2° 3′ 5 ″").toString(), "0.001281889921");
+    expect(evaluate("2+3i").toString(), "2 + 3 i");
+    expect(evaluate("e^i").toString(), "0.540302305868 + 0.841470984808 i");
+    expect(evaluate("e^(iπ)").toString(), "-1");
   });
 }

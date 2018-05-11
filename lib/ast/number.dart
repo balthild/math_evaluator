@@ -1,18 +1,16 @@
 import 'dart:math' as math;
 import 'package:math_evaluator/util.dart';
 import 'contract/token.dart';
-import 'degree.dart';
 import 'contract/calculable.dart';
+import 'degree.dart';
+import 'complex.dart';
 
 class Number implements Calculable, Token {
   final num value;
   Number(this.value);
 
   String toString() {
-    if (value is int)
-      return value.toString();
-    else
-      return numToString(value);
+    return numToString(value);
   }
 
   Calculable operator -() => new Number(-value);
@@ -22,6 +20,8 @@ class Number implements Calculable, Token {
       return new Number(value + x.toRadius());
     else if (x is Number)
       return new Number(value + x.value);
+    else if (x is Complex)
+      return x + this;
 
     throw "Unknown error";
   }
@@ -33,6 +33,8 @@ class Number implements Calculable, Token {
       return x * this;
     else if (x is Number)
       return new Number(value * x.value);
+    else if (x is Complex)
+      return x * this;
 
     throw "Unknown error";
   }
@@ -42,6 +44,8 @@ class Number implements Calculable, Token {
       return new Number(value / x.toRadius());
     else if (x is Number)
       return new Number(value / x.value);
+    else if (x is Complex)
+      return new Complex(value, 0) / x;
 
     throw "Unknown error";
   }
@@ -51,6 +55,8 @@ class Number implements Calculable, Token {
       return new Number(value % x.toRadius());
     else if (x is Number)
       return new Number(value % x.value);
+    else if (x is Complex)
+      throw "Complex numbers do not support modulo operation";
 
     throw "Unknown error";
   }
@@ -60,6 +66,8 @@ class Number implements Calculable, Token {
       return new Number(math.pow(value, x.toRadius()));
     else if (x is Number)
       return new Number(math.pow(value, x.value));
+    else if (x is Complex)
+      return Complex.realPowerComplex(value, x);
 
     throw "Unknown error";
   }

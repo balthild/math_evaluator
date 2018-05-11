@@ -3,6 +3,7 @@ import 'package:math_evaluator/util.dart';
 import 'contract/calculable.dart';
 import 'contract/token.dart';
 import 'number.dart';
+import 'complex.dart';
 
 class Degree implements Calculable, Token {
   final int degree, minute;
@@ -65,6 +66,8 @@ class Degree implements Calculable, Token {
       );
     else if (x is Number)
       return new Number(toRadius() + x.value);
+    else if (x is Complex)
+      return x + this;
 
     throw "Unknown error";
   }
@@ -80,6 +83,8 @@ class Degree implements Calculable, Token {
       );
     else if (x is Degree)
       return new Number(toRadius() * x.toRadius());
+    else if (x is Complex)
+      return x * this;
 
     throw "Unknown error";
   }
@@ -93,6 +98,8 @@ class Degree implements Calculable, Token {
       );
     else if (x is Degree)
       return new Number(toRadius() / x.toRadius());
+    else if (x is Complex)
+      return new Complex(toRadius(), 0) / x;
 
     throw "Unknown error";
   }

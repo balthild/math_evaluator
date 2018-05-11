@@ -4,6 +4,7 @@ import 'contract/evaluable.dart';
 import 'contract/calculable.dart';
 import 'contract/token.dart';
 import 'number.dart';
+import 'complex.dart';
 import 'degree.dart';
 import 'operator.dart';
 import 'identifier.dart';
@@ -92,6 +93,13 @@ class Group implements Evaluable {
         parsed.add(new Number(math.e));
         continue;
       }
+      if (name == "i") {
+        parsed.add(new Complex(0, 1));
+        continue;
+      }
+
+      if (origin.isEmpty)
+        throw "Expected parentheses after function $name";
 
       var right = origin[0];
       if (right is Group) {
