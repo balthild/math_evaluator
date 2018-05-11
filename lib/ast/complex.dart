@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 import 'package:math_evaluator/util.dart';
-import 'contract/token.dart';
 import 'contract/calculable.dart';
 import 'number.dart';
 import 'degree.dart';
 
-class Complex implements Calculable, Token {
+class Complex implements Calculable {
   final num re;
   final num im;
   Complex(this.re, this.im);
@@ -23,6 +22,7 @@ class Complex implements Calculable, Token {
     return "${numToString(re)} + $imStr i";
   }
 
+  // iz = -y + ix
   Complex iz() => new Complex(-im, re);
 
   double norm() => math.sqrt(math.pow(re, 2) + math.pow(im, 2));
@@ -134,7 +134,6 @@ class Complex implements Calculable, Token {
   //  exp(-iz) = cos(z) - i sin(z)
   //  2 cos(z) = exp(iz) + exp(-iz)
   // 2i sin(z) = exp(iz) - exp(-iz)
-  //        iz = -y + ix
   Calculable sin() => (iz().exp() - (-iz()).exp()) / new Complex(0, 2);
   Calculable cos() => (iz().exp() + (-iz()).exp()) / new Number(2);
   Calculable tan() => sin() / cos();
