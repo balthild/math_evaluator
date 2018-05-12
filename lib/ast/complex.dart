@@ -5,8 +5,7 @@ import 'number.dart';
 import 'degree.dart';
 
 class Complex implements Calculable {
-  final num re;
-  final num im;
+  final num re, im;
   Complex(this.re, this.im);
 
   factory Complex.tr(num a, num theta) => new Complex(

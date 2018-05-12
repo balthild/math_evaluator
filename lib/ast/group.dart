@@ -133,6 +133,12 @@ class Group implements Evaluable {
       if (i == 0)
         throw "Unexpected token °";
 
+      if (i > 1) {
+        final last = elements[i - 2];
+        if (last is Degree)
+          throw "Unexpected token °";
+      }
+
       final degLeft = elements[i - 1];
       if (degLeft is! Number)
         throw "Unexpected token °";
@@ -151,8 +157,6 @@ class Group implements Evaluable {
         continue;
 
       final minOp = (minEl as Operator).op;
-      if (minOp == "°")
-        throw "Unexpected token °";
       if (minOp != "′")
         continue;
 
@@ -173,8 +177,6 @@ class Group implements Evaluable {
         continue;
 
       final secOp = (secEl as Operator).op;
-      if (secOp == "°")
-        throw "Unexpected token °";
       if (secOp != "″")
         continue;
 
