@@ -14,9 +14,16 @@ class Complex implements Calculable {
   );
 
   String toString() {
-    var imStr = numToString(im);
+    final imStr = numToString(im);
     if (imStr == "0")
       return numToString(re);
+
+    final reStr = numToString(re);
+    if (reStr == "0")
+      return "$imStr i";
+
+    if (imStr.startsWith("-"))
+      return "${numToString(re)} - ${imStr.substring(1)} i";
 
     return "${numToString(re)} + $imStr i";
   }
@@ -27,7 +34,7 @@ class Complex implements Calculable {
   double norm() => math.sqrt(math.pow(re, 2) + math.pow(im, 2));
 
   double arg() {
-    assert(re != 0 && im != 0);
+    assert(re != 0 || im != 0);
 
     final r = norm();
     return (im >= 0 ? 1 : -1) * math.acos(re / r);
@@ -46,11 +53,18 @@ class Complex implements Calculable {
   // These ideas will allow you to raise any real or complex base to any
   // real or complex exponent.
   static Complex realPowerComplex(num a, Complex z) {
+    if (a == 0)
+      return new Complex(0, 0);
+
     final ax = math.pow(a, z.re);
     return new Complex.tr(ax, z.im * math.log(a));
   }
 
   static Complex complexPowerComplex(Complex w, Complex z) {
+    if (w.im == 0) {
+      return realPowerComplex(w.re, z);
+    }
+
     // Denote w as a*e^(iθ)
     final a = w.norm(), theta = w.arg();
     final az = realPowerComplex(a, z);
@@ -58,6 +72,10 @@ class Complex implements Calculable {
   }
 
   static Complex complexPowerReal(Complex w, num x) {
+    if (w.im == 0) {
+      return new Complex(math.pow(w.re, x), 0);
+    }
+
     // Denote w as a*e^(iθ)
     final a = w.norm(), theta = w.arg();
     final ax = math.pow(a, x);
