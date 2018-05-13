@@ -40,9 +40,9 @@ class Group implements Evaluable {
     assert(elements.length == 1, "Unknown error");
 
     final root = elements[0];
-    if (root is Number || root is Degree)
+    if (root is Calculable)
       return root;
-    else if (root is Func)
+    else if (root is Evaluable)
       return root.evaluate();
 
     throw "Unknown error";
