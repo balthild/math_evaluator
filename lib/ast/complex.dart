@@ -19,13 +19,23 @@ class Complex implements Calculable {
       return numToString(re);
 
     final reStr = numToString(re);
-    if (reStr == "0")
-      return "$imStr i";
+    if (reStr == "0") {
+      if (imStr == "1")
+        return "i";
+      else if (imStr == "-1")
+        return "-i";
+      else
+        return "$imStr i";
+    }
 
-    if (imStr.startsWith("-"))
-      return "${numToString(re)} - ${imStr.substring(1)} i";
-
-    return "${numToString(re)} + $imStr i";
+    if (imStr == "1")
+      return "$reStr + i";
+    else if (imStr == "-1")
+      return "$reStr - i";
+    else if (imStr.startsWith("-"))
+      return "$reStr - ${imStr.substring(1)} i";
+    else
+      return "$reStr + $imStr i";
   }
 
   // iz = -y + ix
