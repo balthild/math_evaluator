@@ -2,7 +2,6 @@ import 'package:math_evaluator/functions.dart';
 import 'contract/element.dart';
 import 'contract/evaluable.dart';
 import 'contract/calculable.dart';
-import 'group.dart';
 
 class Func implements Evaluable {
   final String name;
@@ -14,15 +13,16 @@ class Func implements Evaluable {
   }
 
   Calculable evaluate() {
-    for (int i = 0; i < parameters.length; ++i) {
-      var item = parameters[i];
-      if (item is Func)
-        parameters[i] = item.evaluate();
-      else if (item is Group)
-        parameters[i] = item.evaluate();
+    List<Calculable> evaluatedParameters = [];
+
+    for (final p in parameters) {
+      if (p is Evaluable)
+        evaluatedParameters.add(p.evaluate());
+      else
+        evaluatedParameters.add(p);
     }
 
-    return functions[name](parameters);
+    return functions[name](evaluatedParameters);
   }
 
   @override

@@ -24,6 +24,14 @@ class Group implements Evaluable {
   }
 
   Calculable evaluate() {
+    if (tokens.length == 1) {
+      final inner = tokens[0];
+      if (inner is Calculable)
+        return inner as Calculable;
+      else if (inner is Evaluable)
+        return (inner as Evaluable).evaluate();
+    }
+
     List<Element> elements;
     elements = parseGroups(tokens);
     elements = parseIdentifiers(elements);
@@ -356,12 +364,8 @@ class Group implements Evaluable {
     var item = new Group([]);
     for (var token in tokens) {
       if (token is Operator && token.op == ",") {
-        if (item.tokens.length == 0)
-          throw "Unexpected token ,";
-        else if (item.tokens.length == 1)
-          parameters.add(item.tokens[0]);
-        else
-          parameters.add(item);
+        assert(item.tokens.isNotEmpty, "Unexpected token ,");
+        parameters.add(item);
 
         item = new Group([]);
       } else {
@@ -369,7 +373,7 @@ class Group implements Evaluable {
       }
     }
 
-    if (item.tokens.length == 0)
+    if (item.tokens.isEmpty)
       throw "Unexpected token ) after ,";
 
     parameters.add(item);
