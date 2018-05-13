@@ -350,7 +350,7 @@ class Group implements Evaluable {
     return elements;
   }
 
-  List<Group> toFuncParameters() {
+  List<Element> toFuncParameters() {
     List<Element> parameters = [];
 
     var item = new Group([]);
