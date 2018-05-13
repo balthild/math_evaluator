@@ -2,10 +2,7 @@ import 'package:math_evaluator/ast/contract/calculable.dart';
 
 final Map<String, Function> functions = {
   // Infix operators
-  "_addition": (List<Calculable> p) {
-    assert (p.length == 2);
-    return p[0] + p[1];
-  },
+  "_addition": (List<Calculable> p) => p[0] + p[1],
   "_substruction": (List<Calculable> p) => p[0] - p[1],
   "_multiplication": (List<Calculable> p) => p[0] * p[1],
   "_division": (List<Calculable> p) => p[0] / p[1],
