@@ -19,4 +19,6 @@ abstract class Calculable extends Element {
   Calculable ln();
   Calculable log2();
   Calculable log10();
+  Calculable Re();
+  Calculable Im();
 }

@@ -1,10 +1,9 @@
-import 'dart:math' as math;
+import 'package:math_evaluator/constants.dart';
 import 'contract/element.dart';
 import 'contract/evaluable.dart';
 import 'contract/calculable.dart';
 import 'contract/token.dart';
 import 'number.dart';
-import 'complex.dart';
 import 'degree.dart';
 import 'operator.dart';
 import 'identifier.dart';
@@ -93,16 +92,8 @@ class Group implements Evaluable {
       }
 
       var name = (el as Identifier).name;
-      if (name == "π") {
-        parsed.add(new Number(math.pi));
-        continue;
-      }
-      if (name == "e") {
-        parsed.add(new Number(math.e));
-        continue;
-      }
-      if (name == "i") {
-        parsed.add(new Complex(0, 1));
+      if (constants.containsKey(name)) {
+        parsed.add(constants[name]);
         continue;
       }
 

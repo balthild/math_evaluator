@@ -8,7 +8,7 @@ import 'complex.dart';
 class Degree implements Calculable, Token {
   final int degree, minute;
   final num second;
-  Degree._(int this.degree, int this.minute, num this.second);
+  const Degree._(int this.degree, int this.minute, num this.second);
 
   factory Degree(num degree, num minute, num second) {
     if (degree is double) {
@@ -118,4 +118,6 @@ class Degree implements Calculable, Token {
   Calculable ln() => toNumber().ln();
   Calculable log2() => toNumber().log2();
   Calculable log10() => toNumber().log10();
+  Calculable Re() => toNumber();
+  Calculable Im() => const Number(0);
 }

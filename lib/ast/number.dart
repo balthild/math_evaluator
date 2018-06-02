@@ -7,7 +7,7 @@ import 'complex.dart';
 
 class Number implements Calculable, Token {
   final num value;
-  Number(this.value);
+  const Number(this.value);
 
   String toString() {
     return numToString(value);
@@ -87,4 +87,6 @@ class Number implements Calculable, Token {
   Calculable ln() => new Number(math.log(value));
   Calculable log2() => new Number(math.log(value) / math.ln2);
   Calculable log10() => new Number(math.log(value) / math.ln10);
+  Calculable Re() => this;
+  Calculable Im() => const Number(0);
 }

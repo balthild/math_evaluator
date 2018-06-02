@@ -6,7 +6,7 @@ import 'degree.dart';
 
 class Complex implements Calculable {
   final num re, im;
-  Complex(this.re, this.im);
+  const Complex(this.re, this.im);
 
   factory Complex.tr(num a, num theta) => new Complex(
     a * math.cos(theta),
@@ -170,4 +170,7 @@ class Complex implements Calculable {
   Calculable ln() => new Complex(math.log(norm()), arg());
   Calculable log2() => new Complex(math.log(norm()) / math.ln2, arg() / math.ln2);
   Calculable log10() => new Complex(math.log(norm()) / math.ln10, arg() / math.ln10);
+
+  Calculable Re() => new Number(re);
+  Calculable Im() => new Number(im);
 }

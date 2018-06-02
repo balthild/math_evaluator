@@ -1,11 +1,15 @@
-import 'package:math_evaluator/ast/contract/element.dart';
-import 'package:math_evaluator/ast/group.dart';
-import 'package:math_evaluator/ast/contract/token.dart';
-import 'package:math_evaluator/ast/operator.dart';
-import 'package:math_evaluator/ast/number.dart';
-import 'package:math_evaluator/ast/identifier.dart';
+import 'ast/contract/element.dart';
+import 'ast/contract/token.dart';
+import 'ast/group.dart';
+import 'ast/operator.dart';
+import 'ast/number.dart';
+import 'ast/identifier.dart';
+import 'functions.dart';
+import 'constants.dart';
 
 Element evaluate(String input) {
+  input = input.trim();
+
   if (input.isEmpty)
     return new Number(0);
 
@@ -24,8 +28,6 @@ final whitespaceTest = new RegExp(r"\s");
 final identifierStartTest = new RegExp(r"[A-Za-z]");
 final identifierTest = new RegExp(r"[A-Za-z0-9]");
 final specialIdentifiers = ["π"];
-
-List<int> a = [1];
 
 bool isOperator(String c) => operators.contains(c);
 bool isDigit(String c) => digitTest.hasMatch(c);
@@ -76,18 +78,24 @@ List<Token> lex(String expr) {
       continue;
     }
 
+    if (isSpecialIdentifier(char)) {
+      if (!functions.containsKey(char) && !constants.containsKey(char))
+        throw "Unknown identifier $char";
+
+      tokens.add(new Identifier(char));
+      advance();
+      continue;
+    }
+
     if (isIdentifierStart(char)) {
       String idn = char;
       while (isIdentifier(advance()))
         idn += char;
 
-      tokens.add(new Identifier(idn));
-      continue;
-    }
+      if (!functions.containsKey(idn) && !constants.containsKey(idn))
+        throw "Unknown identifier $idn";
 
-    if (isSpecialIdentifier(char)) {
-      tokens.add(new Identifier(char));
-      advance();
+      tokens.add(new Identifier(idn));
       continue;
     }
 

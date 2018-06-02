@@ -34,5 +34,8 @@ void main() {
     expect(evaluate("exp(ln(100))").toString(), "100");
     expect(evaluate("log2(1024)").toString(), "10");
     expect(evaluate("log10(1000)").toString(), "3");
+    expect(evaluate("log(3, 81)").toString(), "4");
+    expect(evaluate("Re(2+3i)").toString(), "2");
+    expect(evaluate("Im(2+3i)").toString(), "3");
   });
 }

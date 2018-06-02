@@ -1,4 +1,4 @@
-import 'package:math_evaluator/ast/contract/calculable.dart';
+import 'ast/contract/calculable.dart';
 
 final Map<String, Function> functions = {
   // Infix operators
@@ -24,4 +24,7 @@ final Map<String, Function> functions = {
   "ln": (List<Calculable> p) => p[0].ln(),
   "log2": (List<Calculable> p) => p[0].log2(),
   "log10": (List<Calculable> p) => p[0].log10(),
+  "log": (List<Calculable> p) => p[1].ln() / p[0].ln(),
+  "Re": (List<Calculable> p) => p[0].Re(),
+  "Im": (List<Calculable> p) => p[0].Im(),
 };
