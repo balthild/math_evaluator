@@ -24,6 +24,7 @@ void main() {
     expect(evaluate("e^i").toString(), "0.540302305868 + 0.841470984808 i");
     expect(evaluate("e^(iπ)").toString(), "-1");
     expect(evaluate("i^3").toString(), "-i");
+    expect(evaluate("2^3^2").toString(), "512"); // 2^3^2 == 2^(3^2) != (2^3)^2
   });
 
   test('functions', () {

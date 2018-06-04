@@ -1,6 +1,6 @@
-import 'util.dart';
-import 'ast/contract/calculable.dart';
-import 'ast/number.dart';
+import 'package:math_evaluator/util.dart';
+import 'package:math_evaluator/ast/contract/calculable.dart';
+import 'package:math_evaluator/ast/number.dart';
 
 bool isInt(Calculable x) => x is Number && x.value is int;
 

@@ -1,9 +1,9 @@
 import 'contract/token.dart';
 
 class Operator implements Token {
-  final String op;
-  Operator(this.op);
+  final String name;
+  Operator(this.name);
 
   @override
-  String toString() => op;
+  String toString() => name;
 }

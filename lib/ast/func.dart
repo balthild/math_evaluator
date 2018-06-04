@@ -1,7 +1,7 @@
-import 'package:math_evaluator/functions.dart';
 import 'contract/element.dart';
 import 'contract/evaluable.dart';
 import 'contract/calculable.dart';
+import 'difinition/functions.dart';
 
 class Func implements Evaluable {
   final String name;
