@@ -37,5 +37,9 @@ void main() {
     expect(evaluate("log(3, 81)").toString(), "4");
     expect(evaluate("Re(2+3i)").toString(), "2");
     expect(evaluate("Im(2+3i)").toString(), "3");
+    expect(evaluate("abs(-5)").toString(), "5");
+    expect(evaluate("norm(3+4i)").toString(), "5");
+    expect(evaluate("P(5, 2)").toString(), "20");
+    expect(evaluate("C(5, 2)").toString(), "10");
   });
 }

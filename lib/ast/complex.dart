@@ -5,12 +5,24 @@ import 'number.dart';
 import 'degree.dart';
 
 class Complex implements Calculable {
-  final num re, im;
-  const Complex(this.re, this.im);
+  final num re, im, r, arg;
+  const Complex._(this.re, this.im, this.r, this.arg);
 
-  factory Complex.tr(num a, num theta) => new Complex(
+  factory Complex(num re, num im) {
+    final norm = math.sqrt(math.pow(re, 2) + math.pow(im, 2));
+    return new Complex._(
+      re,
+      im,
+      norm,
+      re == 0 && im == 0 ? null : (im >= 0 ? 1 : -1) * math.acos(re / norm),
+    );
+  }
+
+  factory Complex.tr(num a, num theta) => new Complex._(
     a * math.cos(theta),
-    a * math.sin(theta)
+    a * math.sin(theta),
+    a,
+    theta,
   );
 
   String toString() {
@@ -41,15 +53,6 @@ class Complex implements Calculable {
   // iz = -y + ix
   Complex iz() => new Complex(-im, re);
 
-  double norm() => math.sqrt(math.pow(re, 2) + math.pow(im, 2));
-
-  double arg() {
-    assert(re != 0 || im != 0);
-
-    final r = norm();
-    return (im >= 0 ? 1 : -1) * math.acos(re / r);
-  }
-
   // http://mathforum.org/library/drmath/view/52251.html
   // Any real number a can be written as e^ln(a); so
   //     a^(ix) = (e^ln(a))^(ix)
@@ -76,9 +79,8 @@ class Complex implements Calculable {
     }
 
     // Denote w as a*e^(iθ)
-    final a = w.norm(), theta = w.arg();
-    final az = realPowerComplex(a, z);
-    return az * (new Complex(0, theta) * z).exp();
+    final az = realPowerComplex(w.r, z);
+    return az * (new Complex(0, w.arg) * z).exp();
   }
 
   static Complex complexPowerReal(Complex w, num x) {
@@ -86,10 +88,8 @@ class Complex implements Calculable {
       return new Complex(math.pow(w.re, x), 0);
     }
 
-    // Denote w as a*e^(iθ)
-    final a = w.norm(), theta = w.arg();
-    final ax = math.pow(a, x);
-    return new Complex.tr(ax, theta * x);
+    final ax = math.pow(w.r, x);
+    return new Complex.tr(ax, w.arg * x);
   }
 
   Calculable operator -() => new Complex(-re, -im);
@@ -125,11 +125,10 @@ class Complex implements Calculable {
     else if (x is Number)
       return new Complex(re / x.value, im / x.value);
     else if (x is Complex) {
-      // (a+bi) / (c-di) = (ac+bd) / (c^2+d^2) + (bc-ad) / (c^2+d^2)i
-      var r = (math.pow(x.re, 2) + math.pow(x.im, 2));
+      // (a+bi) / (c-di) = (ac+bd) / (c^2+d^2) + (bc-ad)i / (c^2+d^2)
       return new Complex(
-        (re * x.re + im * x.im) / r,
-        (im * x.re - re * x.im) / r
+        (re * x.re + im * x.im) / x.r,
+        (im * x.re - re * x.im) / x.r
       );
     }
 
@@ -167,10 +166,11 @@ class Complex implements Calculable {
   Calculable exp() => new Complex.tr(math.exp(re), im);
 
   // ln(z) = ln(r) + iθ
-  Calculable ln() => new Complex(math.log(norm()), arg());
-  Calculable log2() => new Complex(math.log(norm()) / math.ln2, arg() / math.ln2);
-  Calculable log10() => new Complex(math.log(norm()) / math.ln10, arg() / math.ln10);
+  Calculable ln() => new Complex(math.log(r), arg);
+  Calculable log2() => new Complex(math.log(r) / math.ln2, arg / math.ln2);
+  Calculable log10() => new Complex(math.log(r) / math.ln10, arg / math.ln10);
 
+  Calculable norm() => new Number(r);
   Calculable Re() => new Number(re);
   Calculable Im() => new Number(im);
 }

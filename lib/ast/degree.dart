@@ -118,6 +118,7 @@ class Degree implements Calculable, Token {
   Calculable ln() => toNumber().ln();
   Calculable log2() => toNumber().log2();
   Calculable log10() => toNumber().log10();
+  Calculable norm() => new Number(toRadius().abs());
   Calculable Re() => toNumber();
   Calculable Im() => const Number(0);
 }

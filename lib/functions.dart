@@ -1,4 +1,8 @@
+import 'util.dart';
 import 'ast/contract/calculable.dart';
+import 'ast/number.dart';
+
+bool isInt(Calculable x) => x is Number && x.value is int;
 
 final Map<String, Function> functions = {
   // Infix operators
@@ -25,6 +29,19 @@ final Map<String, Function> functions = {
   "log2": (List<Calculable> p) => p[0].log2(),
   "log10": (List<Calculable> p) => p[0].log10(),
   "log": (List<Calculable> p) => p[1].ln() / p[0].ln(),
+  "abs": (List<Calculable> p) => p[0].norm(),
+  "norm": (List<Calculable> p) => p[0].norm(),
   "Re": (List<Calculable> p) => p[0].Re(),
   "Im": (List<Calculable> p) => p[0].Im(),
+
+  "P": (List<Calculable> p) {
+    final n = p[0], k = p[1];
+    assert(isInt(n) && isInt(k), "Parameters for P(n, k) must be integers");
+    return new Number(perm((n as Number).value, (k as Number).value));
+  },
+  "C": (List<Calculable> p) {
+    final n = p[0], k = p[1];
+    assert(isInt(n) && isInt(k), "Parameters for C(n, k) must be integers");
+    return new Number(comb((n as Number).value, (k as Number).value));
+  },
 };

@@ -14,3 +14,5 @@ String numToString(num n) {
 }
 
 int fact(int n) => n == 0 ? 1 : n * fact(n - 1);
+int perm(int n, int r) => r == 0 ? 1 : n * perm(n - 1, r - 1);
+int comb(int n, int r) => perm(n, r) ~/ fact(r);

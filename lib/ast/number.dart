@@ -87,6 +87,7 @@ class Number implements Calculable, Token {
   Calculable ln() => new Number(math.log(value));
   Calculable log2() => new Number(math.log(value) / math.ln2);
   Calculable log10() => new Number(math.log(value) / math.ln10);
+  Calculable norm() => new Number(value.abs());
   Calculable Re() => this;
   Calculable Im() => const Number(0);
 }
