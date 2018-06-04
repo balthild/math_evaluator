@@ -1,6 +1,6 @@
 name: math_evaluator
 description: A library for parsing and evaluating simple math expressions.
-version: 0.3.6
+version: 0.3.7
 homepage: https://github.com/balthild/math_evaluator
 author: balthild <ibalthild@gmail.com>
 
